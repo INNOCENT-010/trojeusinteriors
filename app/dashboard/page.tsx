@@ -21,39 +21,56 @@ export default function DashboardLogin() {
   }
 
   return (
-    <div style={{
-      minHeight: '100dvh',
-      background: '#0F0F0F',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '24px',
-    }}>
+    <div
+      style={{
+        minHeight: '100svh',
+        
+        background: '#0F0F0F',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+      }}
+    >
       <div style={{ width: '100%', maxWidth: '400px' }}>
         <div style={{ marginBottom: '48px', textAlign: 'center' }}>
-          <p style={{
-            fontFamily: 'var(--font-cormorant)',
-            fontSize: 'clamp(22px, 5vw, 28px)',
-            fontWeight: 400, color: 'var(--offwhite)',
-            letterSpacing: '0.08em',
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-cormorant)',
+              fontSize: 'clamp(22px, 6vw, 28px)',
+              fontWeight: 400,
+              color: 'var(--offwhite)',
+              letterSpacing: '0.08em',
+            }}
+          >
             TROJEUS
           </p>
-          <p style={{
-            fontFamily: 'var(--font-inter)', fontSize: '9px',
-            color: 'var(--brass)', letterSpacing: '0.3em',
-            textTransform: 'uppercase', marginTop: '4px',
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '9px',
+              color: 'var(--brass)',
+              letterSpacing: '0.3em',
+              textTransform: 'uppercase',
+              marginTop: '4px',
+            }}
+          >
             Studio Dashboard
           </p>
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label style={{
-            fontFamily: 'var(--font-inter)', fontSize: '9px',
-            letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'var(--brass)', display: 'block', marginBottom: '8px',
-          }}>
+          <label
+            style={{
+              fontFamily: 'var(--font-inter)',
+              fontSize: '9px',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--brass)',
+              display: 'block',
+              marginBottom: '8px',
+            }}
+          >
             Password
           </label>
           <input
@@ -61,7 +78,6 @@ export default function DashboardLogin() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
-            autoComplete="current-password"
             style={{
               width: '100%',
               background: '#1A1A1A',
@@ -71,17 +87,15 @@ export default function DashboardLogin() {
               fontSize: '16px',
               color: 'var(--offwhite)',
               outline: 'none',
+              borderRadius: '2px',
               transition: 'border-color 0.3s ease',
-              borderRadius: '0',
               WebkitAppearance: 'none',
             }}
             placeholder="Enter password"
+            autoComplete="current-password"
           />
           {error && (
-            <p style={{
-              fontFamily: 'var(--font-inter)', fontSize: '11px',
-              color: '#c0392b', marginTop: '8px',
-            }}>
+            <p style={{ fontFamily: 'var(--font-inter)', fontSize: '11px', color: '#c0392b', marginTop: '8px' }}>
               Incorrect password
             </p>
           )}
