@@ -38,21 +38,10 @@ export default function ServicesSection() {
   const [active, setActive] = useState(0)
 
   return (
-    <section
-      style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '120px 40px',
-      }}
-    >
+    <section style={{ maxWidth: '1200px', margin: '0 auto', padding: '120px 40px' }}>
       {/* Heading */}
       <div style={{ marginBottom: '72px' }}>
-        <p
-          className="overline"
-          style={{ marginBottom: '16px' }}
-        >
-          What we do
-        </p>
+        <p className="overline" style={{ marginBottom: '16px' }}>What we do</p>
         <h2
           style={{
             fontFamily: 'var(--font-cormorant)',
@@ -64,13 +53,46 @@ export default function ServicesSection() {
         >
           Design as a
           <br />
-          <em style={{ fontStyle: 'italic', color: 'var(--brass-light)' }}>
-            discipline.
-          </em>
+          <em style={{ fontStyle: 'italic', color: 'var(--brass-light)' }}>discipline.</em>
         </h2>
       </div>
 
-      {/* Body — two columns */}
+      {/* Mobile — image shown above active service */}
+      <div
+        style={{
+          display: 'none',
+          marginBottom: '32px',
+          position: 'relative',
+          aspectRatio: '16/9',
+          overflow: 'hidden',
+          width: '100%',
+        }}
+        className="services-mobile-image"
+      >
+        {services.map((s, i) => (
+          <div
+            key={s.number}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: active === i ? 1 : 0,
+              transition: 'opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94)',
+            }}
+          >
+            <Image
+              src={s.image}
+              alt={s.title}
+              fill
+              style={{ objectFit: 'cover' }}
+              sizes="100vw"
+            />
+            <div style={{ position: 'absolute', top: '16px', right: '16px', width: '28px', height: '28px', borderTop: '1px solid var(--brass)', borderRight: '1px solid var(--brass)', opacity: 0.6 }} />
+            <div style={{ position: 'absolute', bottom: '16px', left: '16px', width: '28px', height: '28px', borderBottom: '1px solid var(--brass)', borderLeft: '1px solid var(--brass)', opacity: 0.6 }} />
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop — two column layout */}
       <div
         style={{
           display: 'grid',
@@ -78,14 +100,16 @@ export default function ServicesSection() {
           gap: '80px',
           alignItems: 'start',
         }}
+        className="services-desktop-grid"
       >
         {/* Left — service rows */}
         <div>
-          <div className="divider" style={{ marginBottom: '0' }} />
+          <div className="divider" />
           {services.map((s, i) => (
             <div
               key={s.number}
               onClick={() => setActive(i)}
+              onMouseEnter={() => setActive(i)}
               style={{
                 padding: '36px 0',
                 borderBottom: '1px solid rgba(184,150,62,0.12)',
@@ -94,10 +118,9 @@ export default function ServicesSection() {
                 gridTemplateColumns: '56px 1fr',
                 gap: '24px',
                 alignItems: 'start',
-                transition: 'opacity 0.3s ease',
                 opacity: active === i ? 1 : 0.45,
+                transition: 'opacity 0.3s ease',
               }}
-              onMouseEnter={() => setActive(i)}
             >
               <span
                 style={{
@@ -111,7 +134,6 @@ export default function ServicesSection() {
               >
                 {s.number}
               </span>
-
               <div>
                 <h3
                   style={{
@@ -126,8 +148,6 @@ export default function ServicesSection() {
                 >
                   {s.title}
                 </h3>
-
-                {/* Description + tag — only visible when active */}
                 <div
                   style={{
                     overflow: 'hidden',
@@ -136,28 +156,10 @@ export default function ServicesSection() {
                     transition: 'max-height 0.5s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.4s ease',
                   }}
                 >
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: '13px',
-                      fontWeight: 300,
-                      lineHeight: 1.9,
-                      color: 'var(--muted)',
-                      letterSpacing: '0.02em',
-                      marginBottom: '12px',
-                    }}
-                  >
+                  <p style={{ fontFamily: 'var(--font-inter)', fontSize: '13px', fontWeight: 300, lineHeight: 1.9, color: 'var(--muted)', marginBottom: '12px' }}>
                     {s.description}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-inter)',
-                      fontSize: '9px',
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: 'var(--brass)',
-                    }}
-                  >
+                  <p style={{ fontFamily: 'var(--font-inter)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--brass)' }}>
                     {s.tag}
                   </p>
                 </div>
@@ -166,15 +168,8 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        {/* Right — image panel */}
-        <div
-          style={{
-            position: 'sticky',
-            top: '100px',
-            aspectRatio: '3/4',
-            overflow: 'hidden',
-          }}
-        >
+        {/* Right — sticky image */}
+        <div style={{ position: 'sticky', top: '100px', aspectRatio: '3/4', overflow: 'hidden' }}>
           {services.map((s, i) => (
             <div
               key={s.number}
@@ -192,48 +187,10 @@ export default function ServicesSection() {
                 style={{ objectFit: 'cover' }}
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-              {/* Brass corner accent */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '24px',
-                  right: '24px',
-                  width: '40px',
-                  height: '40px',
-                  borderTop: '1px solid var(--brass)',
-                  borderRight: '1px solid var(--brass)',
-                  opacity: 0.6,
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '24px',
-                  left: '24px',
-                  width: '40px',
-                  height: '40px',
-                  borderBottom: '1px solid var(--brass)',
-                  borderLeft: '1px solid var(--brass)',
-                  opacity: 0.6,
-                }}
-              />
-              {/* Service label on image */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '32px',
-                  right: '32px',
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: 'var(--font-inter)',
-                    fontSize: '9px',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: 'var(--brass)',
-                  }}
-                >
+              <div style={{ position: 'absolute', top: '24px', right: '24px', width: '40px', height: '40px', borderTop: '1px solid var(--brass)', borderRight: '1px solid var(--brass)', opacity: 0.6 }} />
+              <div style={{ position: 'absolute', bottom: '24px', left: '24px', width: '40px', height: '40px', borderBottom: '1px solid var(--brass)', borderLeft: '1px solid var(--brass)', opacity: 0.6 }} />
+              <div style={{ position: 'absolute', bottom: '32px', right: '32px' }}>
+                <p style={{ fontFamily: 'var(--font-inter)', fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--brass)' }}>
                   {s.number} / 04
                 </p>
               </div>
@@ -241,6 +198,21 @@ export default function ServicesSection() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .services-desktop-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0 !important;
+          }
+          .services-desktop-grid > div:last-child {
+            display: none !important;
+          }
+          .services-mobile-image {
+            display: block !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }
