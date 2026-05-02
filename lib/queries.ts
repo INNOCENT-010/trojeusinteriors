@@ -62,3 +62,20 @@ export async function submitContactForm(payload: ContactSubmission): Promise<boo
   if (error) { console.error(error); return false }
   return true
 }
+export async function getDreamSpaces(): Promise<DreamSpace[]> {
+  const { data, error } = await supabase
+    .from('dream_spaces')
+    .select('*')
+    .eq('status', 'published')
+    .order('sort_order', { ascending: true })
+  if (error) { console.error(error); return [] }
+  return data ?? []
+}
+
+export async function getSiteSettings(): Promise<Record<string, string>> {
+  const { data, error } = await supabase
+    .from('site_settings')
+    .select('key, value')
+  if (error) { console.error(error); return {} }
+  return Object.fromEntries((data ?? []).map(s => [s.key, s.value ?? '']))
+}

@@ -2,14 +2,16 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Navbar from '@/components/Navbar'
 import ProductStrip from '@/components/ProductStrip'
-import { getFeaturedProjects } from '@/lib/queries'
-import { supabase } from '@/lib/supabase'
-import type { Project } from '@/types'
+import DreamSpacesSection from '@/components/DreamSpacesSection'
 import ServicesSection from '@/components/ServicesSection'
+import { getFeaturedProjects, getDreamSpaces, getSiteSettings } from '@/lib/queries'
+import { supabase } from '@/lib/supabase'
+import type { Project, DreamSpace } from '@/types'
 
 const navLinks = [
   { href: '/projects', label: 'Projects' },
   { href: '/renders', label: '3D Renders' },
+  { href: '/dream-spaces', label: 'Dream Spaces' },
   { href: '/product-design', label: 'Product Design' },
   { href: '/contact', label: 'Contact' },
 ]
@@ -47,6 +49,8 @@ const services = [
 export default async function HomePage() {
   let featuredProjects: Project[] = []
   let productCategories: string[] = []
+  let dreamSpaces: DreamSpace[] = []
+  let siteSettings: Record<string, string> = {}
 
   try {
     featuredProjects = await getFeaturedProjects()
@@ -65,6 +69,26 @@ export default async function HomePage() {
     // fallback to empty
   }
 
+  try {
+    dreamSpaces = await getDreamSpaces()
+  } catch {
+    // fallback to empty
+  }
+
+  try {
+    siteSettings = await getSiteSettings()
+  } catch {
+    // fallback to empty
+  }
+
+  const heroImage = siteSettings['hero_image'] || PLACEHOLDER_WIDE
+  const heroLine1 = siteSettings['hero_headline_line1'] || 'We design'
+  const heroLine2 = siteSettings['hero_headline_line2'] || 'spaces'
+  const heroLine3 = siteSettings['hero_headline_line3'] || 'that endure.'
+  const heroSubtext =
+    siteSettings['hero_subtext'] ||
+    'Bespoke interiors, 3D visualisations, and signature furniture for clients who demand more than the ordinary.'
+
   return (
     <main style={{ background: 'var(--charcoal)', color: 'var(--offwhite)', minHeight: '100vh' }}>
       <Navbar />
@@ -82,7 +106,7 @@ export default async function HomePage() {
       >
         <div style={{ position: 'absolute', inset: 0 }}>
           <Image
-            src={PLACEHOLDER_WIDE}
+            src={heroImage}
             alt="Trojeusinteriors — luxury interior"
             fill
             style={{ objectFit: 'cover', objectPosition: 'center' }}
@@ -92,7 +116,8 @@ export default async function HomePage() {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(135deg, rgba(17,17,17,0.75) 0%, rgba(17,17,17,0.45) 50%, rgba(17,17,17,0.7) 100%)',
+              background:
+                'linear-gradient(135deg, rgba(17,17,17,0.75) 0%, rgba(17,17,17,0.45) 50%, rgba(17,17,17,0.7) 100%)',
             }}
           />
         </div>
@@ -120,11 +145,11 @@ export default async function HomePage() {
               marginBottom: '32px',
             }}
           >
-            We design
+            {heroLine1}
             <br />
-            <em style={{ fontStyle: 'italic', color: 'var(--brass-light)' }}>spaces</em>
+            <em style={{ fontStyle: 'italic', color: 'var(--brass-light)' }}>{heroLine2}</em>
             <br />
-            that endure.
+            {heroLine3}
           </h1>
           <p
             className="fade-up fade-up-delay-2"
@@ -139,10 +164,12 @@ export default async function HomePage() {
               letterSpacing: '0.02em',
             }}
           >
-            Bespoke interiors, 3D visualisations, and signature furniture
-            for clients who demand more than the ordinary.
+            {heroSubtext}
           </p>
-          <div className="fade-up fade-up-delay-3" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div
+            className="fade-up fade-up-delay-3"
+            style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
+          >
             <Link href="/projects" className="btn-brass-filled">
               View Projects
             </Link>
@@ -175,11 +202,17 @@ export default async function HomePage() {
           >
             Scroll
           </span>
-          <div style={{ width: '1px', height: '48px', background: 'var(--brass)', opacity: 0.5 }} />
+          <div
+            style={{ width: '1px', height: '48px', background: 'var(--brass)', opacity: 0.5 }}
+          />
         </div>
       </section>
 
+      {/* ── SERVICES ── */}
       <ServicesSection />
+
+      {/* ── DREAM SPACES ── */}
+      <DreamSpacesSection spaces={dreamSpaces} />
 
       {/* ── FEATURED PROJECTS ── */}
       <section style={{ padding: '0 40px 120px', maxWidth: '1200px', margin: '0 auto' }}>
@@ -192,7 +225,9 @@ export default async function HomePage() {
           }}
         >
           <div>
-            <p className="overline" style={{ marginBottom: '16px' }}>Selected work</p>
+            <p className="overline" style={{ marginBottom: '16px' }}>
+              Selected work
+            </p>
             <h2
               style={{
                 fontFamily: 'var(--font-cormorant)',
@@ -328,9 +363,13 @@ export default async function HomePage() {
         }}
       >
         <div style={{ padding: '0 40px', maxWidth: '1200px', margin: '0 auto 48px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
+          >
             <div>
-              <p className="overline" style={{ marginBottom: '16px' }}>Objects & furniture</p>
+              <p className="overline" style={{ marginBottom: '16px' }}>
+                Objects & furniture
+              </p>
               <h2
                 style={{
                   fontFamily: 'var(--font-cormorant)',
@@ -359,9 +398,10 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Dynamic category pills */}
           {productCategories.length > 0 && (
-            <div style={{ display: 'flex', gap: '8px', marginTop: '24px', flexWrap: 'wrap' }}>
+            <div
+              style={{ display: 'flex', gap: '8px', marginTop: '24px', flexWrap: 'wrap' }}
+            >
               {productCategories.map((cat) => (
                 <Link
                   key={cat}
@@ -445,7 +485,9 @@ export default async function HomePage() {
           textAlign: 'center',
         }}
       >
-        <p className="overline" style={{ marginBottom: '24px' }}>Ready to begin?</p>
+        <p className="overline" style={{ marginBottom: '24px' }}>
+          Ready to begin?
+        </p>
         <h2
           style={{
             fontFamily: 'var(--font-cormorant)',

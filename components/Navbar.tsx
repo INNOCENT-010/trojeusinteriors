@@ -6,9 +6,11 @@ import { useEffect, useState } from 'react'
 
 const navLinks = [
   { href: '/projects', label: 'Projects' },
+  { href: '/dream-spaces', label: 'Spaces' },
   { href: '/renders', label: '3D Renders' },
   { href: '/product-design', label: 'Product Design' },
   { href: '/contact', label: 'Contact' },
+  
 ]
 
 export default function Navbar() {

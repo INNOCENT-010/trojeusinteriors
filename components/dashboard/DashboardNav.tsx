@@ -8,6 +8,8 @@ const links = [
   { href: '/dashboard/products', label: 'Products', icon: '◻' },
   { href: '/dashboard/categories', label: 'Categories', icon: '◈' },
   { href: '/dashboard/submissions', label: 'Submissions', icon: '◉' },
+  { href: '/dashboard/dream-spaces', label: 'Dream Spaces', icon: '✦' },
+  { href: '/dashboard/hero', label: 'Hero Editor', icon: '◈' },
 ]
 
 export default function DashboardNav() {
