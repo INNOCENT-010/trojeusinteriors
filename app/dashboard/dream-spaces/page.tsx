@@ -13,10 +13,10 @@ const LABELS: Record<string, string> = { kitchen: 'Kitchen', bedroom: 'Bedroom',
 const EMPTY: Omit<DreamSpace, 'id' | 'created_at'> = {
   title: '',
   slug: '',
-  description: '',
+  description: '' as string | null,
   category: 'bedroom',
-  images: [],
-  related_project_slug: '',
+  images: [] as string[],
+  related_project_slug: '' as string | null,
   featured: false,
   sort_order: 0,
   status: 'draft',
@@ -240,7 +240,7 @@ export default function DashboardDreamSpaces() {
             <label style={labelStyle}>Description</label>
             <textarea
               style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }}
-              value={form.description}
+              value={form.description ?? ''}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="Describe this space..."
             />
@@ -250,7 +250,7 @@ export default function DashboardDreamSpaces() {
             <label style={labelStyle}>Related Project Slug</label>
             <input
               style={inputStyle}
-              value={form.related_project_slug}
+              value={form.related_project_slug ?? ''}
               onChange={e => setForm(f => ({ ...f, related_project_slug: e.target.value }))}
               placeholder="e.g. lekki-penthouse (must match a project slug)"
             />

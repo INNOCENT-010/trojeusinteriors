@@ -4,7 +4,7 @@ import { useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 
 interface Props {
-  bucket: 'project-images' | 'product-images'
+  bucket: string
   onUpload: (url: string) => void
   label?: string
   accept?: string
