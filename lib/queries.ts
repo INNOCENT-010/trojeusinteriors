@@ -1,6 +1,6 @@
 import { supabase } from './supabase'
-import type { Project, ContactSubmission, ProductDesign } from '@/types'
 
+import type { Project, ContactSubmission, ProductDesign, DreamSpace } from '@/types'
 export async function getFeaturedProjects(): Promise<Project[]> {
   const { data, error } = await supabase
     .from('projects')
