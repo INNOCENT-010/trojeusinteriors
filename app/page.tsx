@@ -16,35 +16,12 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ]
 
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80'
 const PLACEHOLDER_WIDE = 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1400&q=80'
+const PLACEHOLDER = 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&q=80'
 
-const services = [
-  {
-    number: '01',
-    title: 'Spatial Planning',
-    description:
-      'Precision floor plans, traffic-flow analysis, and material specification — every square metre designed with intention.',
-  },
-  {
-    number: '02',
-    title: '3D Visualisation',
-    description:
-      'Photorealistic renders that let you inhabit a space before a single wall is built. Confidence before commitment.',
-  },
-  {
-    number: '03',
-    title: 'Product Design',
-    description:
-      'Signature bedframes, cushions, and bed walls crafted as bespoke objects — furniture as a form of fine art.',
-  },
-  {
-    number: '04',
-    title: 'Turnkey Execution',
-    description:
-      'From concept to handover. We manage every contractor, material, and milestone so you never have to.',
-  },
-]
+function isVideo(url: string) {
+  return /\.(mp4|mov|webm|ogg)/i.test(url)
+}
 
 export default async function HomePage() {
   let featuredProjects: Project[] = []
@@ -105,13 +82,29 @@ export default async function HomePage() {
         }}
       >
         <div style={{ position: 'absolute', inset: 0 }}>
-          <Image
-            src={heroImage}
-            alt="Trojeusinteriors — luxury interior"
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center' }}
-            priority
-          />
+          {isVideo(heroImage) ? (
+            <video
+              src={heroImage}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
+            />
+          ) : (
+            <Image
+              src={heroImage}
+              alt="Trojeusinteriors — luxury interior"
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center' }}
+              priority
+            />
+          )}
           <div
             style={{
               position: 'absolute',
@@ -441,8 +434,8 @@ export default async function HomePage() {
           }}
         >
           {[
-            { value: '8+', label: 'Years of practice' },
-            { value: '60+', label: 'Projects completed' },
+            { value: '3+', label: 'Years of practice' },
+            { value: '8+', label: 'Projects completed' },
             { value: '100%', label: 'Client satisfaction' },
             { value: 'Lagos', label: 'Based in Nigeria' },
           ].map((stat) => (

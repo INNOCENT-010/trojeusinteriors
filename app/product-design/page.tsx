@@ -6,11 +6,21 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-const CATEGORIES = ['All', 'Bedframe', 'Cushion', 'Bedwall', 'Lighting', 'Accessory']
+function isVideo(url: string) {
+  return /\.(mp4|mov|webm|ogg)/i.test(url)
+}
+
+function toLabel(cat: string) {
+  return cat
+    .split(/[-_]/)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
+}
 
 export default function ProductDesignPage() {
   const [products, setProducts] = useState<any[]>([])
   const [filtered, setFiltered] = useState<any[]>([])
+  const [categories, setCategories] = useState<string[]>(['All'])
   const [active, setActive] = useState('All')
   const [loading, setLoading] = useState(true)
 
@@ -21,8 +31,12 @@ export default function ProductDesignPage() {
       .eq('status', 'published')
       .order('created_at', { ascending: false })
       .then(({ data }) => {
-        setProducts(data ?? [])
-        setFiltered(data ?? [])
+        const items = data ?? []
+        // Derive unique categories from actual data
+        const unique = Array.from(new Set(items.map((p: any) => p.category as string)))
+        setCategories(['All', ...unique])
+        setProducts(items)
+        setFiltered(items)
         setLoading(false)
       })
   }, [])
@@ -67,7 +81,7 @@ export default function ProductDesignPage() {
           right — crafted with precision materials and enduring proportions.
         </p>
 
-        {/* Category filter */}
+        {/* Category filter — fully dynamic */}
         <div
           style={{
             display: 'flex',
@@ -77,7 +91,7 @@ export default function ProductDesignPage() {
             flexWrap: 'wrap',
           }}
         >
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => handleFilter(cat)}
@@ -96,7 +110,7 @@ export default function ProductDesignPage() {
                 transition: 'color 0.3s ease',
               }}
             >
-              {cat}
+              {cat === 'All' ? 'All' : toLabel(cat)}
             </button>
           ))}
         </div>
@@ -131,12 +145,29 @@ export default function ProductDesignPage() {
                   }}
                 >
                   {p.images?.[0] && (
-                    <Image
-                      src={p.images[0]}
-                      alt={p.title}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
+                    isVideo(p.images[0]) ? (
+                      <video
+                        src={p.images[0]}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    ) : (
+                      <Image
+                        src={p.images[0]}
+                        alt={p.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                      />
+                    )
                   )}
                   <div className="project-card-overlay" />
                   <div
